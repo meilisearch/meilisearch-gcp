@@ -27,11 +27,17 @@ config = {
                 }
             }
         ],
+        "tags": {
+            "items": [
+                "http-server",
+                "https-server"
+            ],
+  },
 
         # Specify a network interface with NAT to access the public
         # internet.
         'networkInterfaces': [{
-            'network': 'global/networks/marketplace-vpc',
+            'network': 'global/networks/default',
             'accessConfigs': [
                 {'type': 'ONE_TO_ONE_NAT', 'name': 'External NAT'}
             ]
