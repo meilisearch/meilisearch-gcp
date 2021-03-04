@@ -9,7 +9,7 @@ compute = googleapiclient.discovery.build('compute', 'v1')
 print('Creating GCP Compute instance')
 
 source_image = compute.images().getFromFamily(
-    project='debian-cloud',
+    project='ubuntu-os-cloud',
     family=conf.DEBIAN_BASE_IMAGE_FAMILY
 ).execute()['selfLink']
 print(source_image)
@@ -39,12 +39,12 @@ config = {
 
         #user-data
         'metadata': {
-            'items': [{
-                # Startup script is automatically executed by the
-                # instance upon startup.
-                'key': 'user-data',
-                'value': conf.USER_DATA,
-            }]
+            'items': [
+                {
+                    'key': 'user-data',
+                    'value': conf.USER_DATA,
+                }
+            ]
         }
 
     }

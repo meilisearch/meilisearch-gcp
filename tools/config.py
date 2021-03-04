@@ -7,7 +7,7 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 
 ### Setup environment and settings
 
-DEBIAN_BASE_IMAGE_FAMILY='debian-10'
+DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
 
 USER_DATA =requests.get(
     'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/cloud-config.yaml'
