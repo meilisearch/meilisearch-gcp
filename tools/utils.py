@@ -11,7 +11,7 @@ STATUS_ERROR=2
 
 ### INSTANCE
 
-def wait_for_instance_running(instance, project, zone, timeout_seconds=None):
+def wait_for_instance_running(project, zone, timeout_seconds=None):
     compute = googleapiclient.discovery.build('compute', 'v1')
     start_time = datetime.datetime.now()
     while timeout_seconds is None \
@@ -24,18 +24,18 @@ def wait_for_instance_running(instance, project, zone, timeout_seconds=None):
         time.sleep(1)
     return STATUS_TIMEOUT, None
 
-# def wait_for_health_check(instance, timeout_seconds=None):
-#     start_time = datetime.datetime.now()
-#     while timeout_seconds is None \
-#         or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
-#         try:
-#             resp = requests.get('http://{}/health'.format(instance.public_ip_address))
-#             if resp.status_code >=200 and resp.status_code < 300:
-#                 return STATUS_OK
-#         except Exception as e:
-#                 pass
-#         time.sleep(1)
-#     return STATUS_TIMEOUT 
+def wait_for_health_check(instance_ip, timeout_seconds=None):
+    start_time = datetime.datetime.now()
+    while timeout_seconds is None \
+        or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
+        try:
+            resp = requests.get('http://{}/health'.format(instance_ip))
+            if resp.status_code >=200 and resp.status_code < 300:
+                return STATUS_OK
+        except Exception as e:
+                pass
+        time.sleep(1)
+    return STATUS_TIMEOUT 
 
 # def terminate_instance_and_exit(instance):
 #     print('   Terminating instance {}'.format(instance.id))
