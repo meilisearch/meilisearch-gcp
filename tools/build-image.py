@@ -1,8 +1,12 @@
+from time import sleep
 import googleapiclient.discovery
 
 import config as conf
+import utils
 
 compute = googleapiclient.discovery.build('compute', 'v1')
+instance = None
+instance_ip = None
 
 ### Create EC2 instance to setup MeiliSearch
 
@@ -52,10 +56,23 @@ config = {
         ]
     }
 }
-
-resp = compute.instances().insert(
+create = compute.instances().insert(
         project=conf.GCP_DEFAULT_PROJECT,
         zone=conf.GCP_DEFAULT_ZONE,
         body=config).execute()
+print('   Instance created. ID: {}'.format(create['name']))
 
-print(resp)
+
+### Wait for EC2 instance to be 'RUNNING'
+
+print('Waiting for GCP Compute instance state to be "RUNNING"')
+state_code, state = utils.wait_for_instance_running(instance, conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
+print('   Instance state: {}'.format(state))
+
+if state_code == utils.STATUS_OK:
+    instance = compute.instances().get(project = conf.GCP_DEFAULT_PROJECT, zone=conf.GCP_DEFAULT_ZONE, instance=conf.INSTANCE_BUILD_NAME).execute()
+    instance_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
+    print('   Instance IP: {}'.format(instance_ip))
+else:
+    print('   Error: {}. State: {}.'.format(state_code, state))
+    utils.terminate_instance_and_exit(instance)
