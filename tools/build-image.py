@@ -1,5 +1,6 @@
 from time import sleep
 import googleapiclient.discovery
+import os
 
 import config as conf
 import utils
@@ -52,6 +53,10 @@ config = {
             {
                 'key': 'user-data',
                 'value': conf.USER_DATA,
+            },
+            {
+                "key": "block-project-ssh-keys",
+                "value": False
             }
         ]
     }
@@ -66,7 +71,7 @@ print('   Instance created. ID: {}'.format(create['name']))
 ### Wait for EC2 instance to be 'RUNNING'
 
 print('Waiting for GCP Compute instance state to be "RUNNING"')
-state_code, state = utils.wait_for_instance_running(instance, conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
+state_code, state = utils.wait_for_instance_running(conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
 print('   Instance state: {}'.format(state))
 
 if state_code == utils.STATUS_OK:
@@ -76,3 +81,30 @@ if state_code == utils.STATUS_OK:
 else:
     print('   Error: {}. State: {}.'.format(state_code, state))
     utils.terminate_instance_and_exit(instance)
+
+### Wait for Health check after configuration is finished
+
+print('Waiting for MeiliSearch health check (may take a few minutes: config and reboot)')
+health = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
+if health == utils.STATUS_OK:
+    print('   Instance is healthy')
+else:
+    print('   Timeout waiting for health check')
+    utils.terminate_instance_and_exit(instance)
+
+### Execute deploy script via SSH
+
+# Add your SSH KEY to https://console.cloud.google.com/compute/metadata/sshKeys
+commands = [
+    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0} {1}'.format(conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, "GCP"),
+]
+
+for cmd in commands:
+    ssh_command = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
+        user=conf.SSH_USER,
+        host=instance_ip,
+        cmd=cmd,
+    )
+    print("EXECUTE COMMAND:", ssh_command)
+    os.system(ssh_command)
+    sleep(5)
