@@ -1,5 +1,6 @@
 from time import sleep
 import googleapiclient.discovery
+import os
 
 import config as conf
 import utils
@@ -52,6 +53,10 @@ config = {
             {
                 'key': 'user-data',
                 'value': conf.USER_DATA,
+            },
+            {
+                "key": "block-project-ssh-keys",
+                "value": False
             }
         ]
     }
@@ -86,3 +91,20 @@ if health == utils.STATUS_OK:
 else:
     print('   Timeout waiting for health check')
     utils.terminate_instance_and_exit(instance)
+
+### Execute deploy script via SSH
+
+# Add your SSH KEY to https://console.cloud.google.com/compute/metadata/sshKeys
+commands = [
+    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0} {1}'.format(conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, "GCP"),
+]
+
+for cmd in commands:
+    ssh_command = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
+        user=conf.SSH_USER,
+        host=instance_ip,
+        cmd=cmd,
+    )
+    print("EXECUTE COMMAND:", ssh_command)
+    os.system(ssh_command)
+    sleep(5)

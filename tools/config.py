@@ -7,6 +7,8 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 
 ### Setup environment and settings
 
+SSH_USER='esk'
+
 DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
 
 USER_DATA =requests.get(
