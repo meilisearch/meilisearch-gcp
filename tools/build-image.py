@@ -16,55 +16,15 @@ print('Creating GCP Compute instance')
 source_image = compute.images().getFromFamily(
     project='ubuntu-os-cloud',
     family=conf.DEBIAN_BASE_IMAGE_FAMILY
-).execute()['selfLink']
+).execute()
 
-# DOCS: https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
-config = {
-    'name': conf.INSTANCE_BUILD_NAME,
-    'machineType': conf.INSTANCE_TYPE,
-    'disks': [
-        {
-            'boot': True,
-            'autoDelete': True,
-            'initializeParams': {
-                'sourceImage': source_image,
-            }
-        }
-    ],
-    "tags": {
-        "items": [
-            "http-server",
-            "https-server"
-        ],
-    },
+instance_config = conf.BUILD_INSTANCE_CONFIG
+instance_config['disks'][0]['initializeParams']['sourceImage'] = source_image['selfLink']
 
-    # Specify a network interface with NAT to access the public
-    # internet.
-    'networkInterfaces': [{
-        'network': 'global/networks/default',
-        'accessConfigs': [
-            {'type': 'ONE_TO_ONE_NAT', 'name': 'External NAT'}
-        ]
-    }],
-
-    #user-data
-    'metadata': {
-        'items': [
-            {
-                'key': 'user-data',
-                'value': conf.USER_DATA,
-            },
-            {
-                "key": "block-project-ssh-keys",
-                "value": False
-            }
-        ]
-    }
-}
 create = compute.instances().insert(
         project=conf.GCP_DEFAULT_PROJECT,
         zone=conf.GCP_DEFAULT_ZONE,
-        body=config).execute()
+        body=instance_config).execute()
 print('   Instance created. Name: {}'.format(conf.INSTANCE_BUILD_NAME))
 
 

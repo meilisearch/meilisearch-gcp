@@ -32,3 +32,47 @@ GCP_DEFAULT_ZONE='us-central1-a'
 INSTANCE_TYPE='zones/{}/machineTypes/n1-standard-1'.format(GCP_DEFAULT_ZONE)
 
 MEILISEARCH_LOGO_URL='https://github.com/meilisearch/integration-guides/blob/main/assets/logos/logo.svg'
+
+# DOCS: https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
+BUILD_INSTANCE_CONFIG = {
+    'name': INSTANCE_BUILD_NAME,
+    'machineType': INSTANCE_TYPE,
+    'disks': [
+        {
+            'boot': True,
+            'autoDelete': True,
+            'initializeParams': {
+                'sourceImage': '',
+            }
+        }
+    ],
+    "tags": {
+        "items": [
+            "http-server",
+            "https-server"
+        ],
+    },
+
+    # Specify a network interface with NAT to access the public
+    # internet.
+    'networkInterfaces': [{
+        'network': 'global/networks/default',
+        'accessConfigs': [
+            {'type': 'ONE_TO_ONE_NAT', 'name': 'External NAT'}
+        ]
+    }],
+
+    #user-data
+    'metadata': {
+        'items': [
+            {
+                'key': 'user-data',
+                'value': USER_DATA,
+            },
+            {
+                "key": "block-project-ssh-keys",
+                "value": False
+            }
+        ]
+    }
+}
