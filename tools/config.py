@@ -10,6 +10,7 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 SSH_USER='esk'
 
 DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
+IMAGE_DESCRIPTION_NAME="MeiliSearch-{} running on {}".format(MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 
 USER_DATA =requests.get(
     'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/cloud-config.yaml'
