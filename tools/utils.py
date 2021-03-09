@@ -33,46 +33,55 @@ def wait_for_health_check(instance_ip, timeout_seconds=None):
             if resp.status_code >=200 and resp.status_code < 300:
                 return STATUS_OK
         except Exception as e:
-                pass
+            pass
         time.sleep(1)
-    return STATUS_TIMEOUT 
+    return STATUS_TIMEOUT
 
-# def terminate_instance_and_exit(instance):
-#     print('   Terminating instance {}'.format(instance.id))
-#     instance.terminate()
-#     print('ENDING PROCESS WITH EXIT CODE 1')
-#     exit(1)
+def wait_for_zone_operation(compute, project, zone, operation, timeout_seconds=None):
+    start_time = datetime.datetime.now()
+    while timeout_seconds is None \
+        or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
+        try:
+            result = compute.zoneOperations().get(
+                project=project,
+                zone=zone,
+                operation=operation).execute()
+            if result['status'] == 'DONE':
+                if 'error' in result:
+                    raise Exception(result['error'])
+                return STATUS_OK
+        except Exception as e:
+            print(e)
+        time.sleep(1)
+    return STATUS_TIMEOUT
 
-# ### AMI
+def wait_for_global_operation(compute, project, operation, timeout_seconds=None):
+    start_time = datetime.datetime.now()
+    while timeout_seconds is None \
+        or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
+        try:
+            result = compute.globalOperations().get(
+                project=project,
+                operation=operation).execute()
+            if result['status'] == 'DONE':
+                if 'error' in result:
+                    raise Exception(result['error'])
+                return STATUS_OK
+        except Exception as e:
+            print(e)
+        time.sleep(1)
+    return STATUS_TIMEOUT
 
-# def wait_for_ami_available(image_id, region, timeout_seconds=None):
-#     ec2 = boto3.resource('ec2', region)
-#     start_time = datetime.datetime.now()
-#     while timeout_seconds is None \
-#         or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
-#         ami  = ec2.Image(image_id)
-#         if ami.state != 'pending':
-#             if ami.state == 'available':
-#                 return STATUS_OK, ami
-#             return STATUS_ERROR, ami
-#         time.sleep(1)
-#     return STATUS_TIMEOUT, None
 
-# def make_ami_public(image_id, region, timeout_seconds=None):
-#     ec2 = boto3.resource('ec2', region)
-#     start_time = datetime.datetime.now()
-#     while timeout_seconds is None \
-#         or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
-#         ami  = ec2.Image(image_id)
-#         ami.modify_attribute(
-#             LaunchPermission={
-#                 'Add': [{'Group': 'all'}]
-#             }
-#         )
-#         if ami.public:
-#             return STATUS_OK, ami.public
-#         time.sleep(1)
-#     return STATUS_TIMEOUT, None
+def terminate_instance_and_exit(compute, project, zone, instance):
+    print('   Terminating instance {}'.format(instance.id))
+    compute.instances().delete(
+        project=project,
+        zone=zone,
+        instance=instance
+    ).execute()
+    print('ENDING PROCESS WITH EXIT CODE 1')
+    exit(1)
 
 ### GENERAL
 
