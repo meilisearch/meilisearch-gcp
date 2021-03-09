@@ -1,5 +1,4 @@
 from time import sleep
-from google.auth.environment_vars import PROJECT
 import googleapiclient.discovery
 import os
 
