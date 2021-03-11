@@ -5,12 +5,20 @@ from datetime import datetime
 
 MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 
+# Update with the AMI id that you want to publish after TESTING
+
+PUBLISH_IMAGE_NAME='meilisearch-v0-19-0-ubuntu-2004-lts-build--11-03-2021-19-42-32' 
+
 ### Setup environment and settings
 
 SSH_USER='esk'
 
 DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
+
 IMAGE_DESCRIPTION_NAME="MeiliSearch-{} running on {}".format(MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
+IMAGE_FORMAT='vmdk'
+IMAGE_DESTINATION_URI='gs://meilisearch-image/meilisearch-{}-{}.{}'.format(MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY, IMAGE_FORMAT)
+SERVICE_ACCOUNT_EMAIL='591812945139-compute@developer.gserviceaccount.com'
 
 USER_DATA =requests.get(
     'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/cloud-config.yaml'
