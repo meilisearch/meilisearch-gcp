@@ -23,5 +23,31 @@
 
 **MeiliSearch** is an open-source search engine. [Discover what MeiliSearch is!](https://github.com/meilisearch/MeiliSearch)
 
+## Table of Contents <!-- omit in toc -->
 
-⚠️ WIP: WORK IN PROGRESS ⚠️
+- [🚀 How to deploy MeiliSearch on GCP](#-how-to-deploy-meilisearch-on-gcp)
+- [🎁 Content of this repository](#-content-of-this-repository)
+- [📖 Documentation](#-documentation)
+- [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
+
+## 🚀 How to deploy MeiliSearch on GCP
+
+[Coming soon...]
+
+## 🎁 Content of this repository
+
+This repository contains a few tools and scripts used mainly by the MeiliSearch team, aiming to provide our users simple ways to deploy and configure MeiliSearch in the cloud. As our heart resides on the Open Source community, we maintain several of this tools as open source repository.
+
+## 📖 Documentation
+
+See our [Documentation](https://docs.meilisearch.com/learn/tutorials/getting_started.html) or our [API References](https://docs.meilisearch.com/reference/api/).
+
+## ⚙️ Development Workflow and Contributing
+
+Any new contribution is more than welcome in this project!
+
+If you want to know more about the development workflow or want to contribute, please visit our [contributing guidelines](/CONTRIBUTING.md) for detailed instructions!
+
+<hr>
+
+**MeiliSearch** provides and maintains many **SDKs and Integration tools** like this one. We want to provide everyone with an **amazing search experience for any kind of project**. If you want to contribute, make suggestions, or just know what's going on right now, visit us in the [integration-guides](https://github.com/meilisearch/integration-guides) repository.
