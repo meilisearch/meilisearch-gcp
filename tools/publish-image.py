@@ -12,6 +12,7 @@ import config as conf
 import utils
 
 cloudbuild = googleapiclient.discovery.build('cloudbuild', 'v1')
+compute = googleapiclient.discovery.build('compute', 'v1')
 
 export_image = cloudbuild.projects().builds().create(
     projectId='meilisearchimage',
@@ -36,12 +37,12 @@ export_image = cloudbuild.projects().builds().create(
 ).execute()
 
 print("Waiting for image export operation")
-image_export = utils.wait_for_build_operation(
+image_export_operation= utils.wait_for_build_operation(
     cloudbuild=cloudbuild, 
     project=conf.GCP_DEFAULT_PROJECT, 
     operation=export_image['metadata']['build']['id']
 )
-if image_export == utils.STATUS_OK:
+if image_export_operation== utils.STATUS_OK:
     print('   Image exported: {}'.format(conf.IMAGE_DESTINATION_URI))
 else:
     print('   Timeout waiting for image export')
@@ -55,3 +56,9 @@ policy.bindings.append({"role": 'roles/storage.objectViewer', "members": {'allUs
 bucket.set_iam_policy(policy)
 print("   Image is now public")
 
+# Delete custom image
+
+delete_image_operation = compute.images().delete(
+    project=conf.GCP_DEFAULT_PROJECT,
+    image=conf.PUBLISH_IMAGE_NAME
+).execute()
