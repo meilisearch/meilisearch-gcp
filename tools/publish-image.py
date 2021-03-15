@@ -8,6 +8,7 @@
 import googleapiclient.discovery
 
 import config as conf
+import utils
 
 cloudbuild = googleapiclient.discovery.build('cloudbuild', 'v1')
 
@@ -32,4 +33,14 @@ export_image = cloudbuild.projects().builds().create(
         ]
     }
 ).execute()
-print(export_image)
+
+print("Waiting for image publish operation")
+image_publication = utils.wait_for_build_operation(
+    cloudbuild=cloudbuild, 
+    project=conf.GCP_DEFAULT_PROJECT, 
+    operation=export_image['metadata']['build']['id']
+)
+if image_publication == utils.STATUS_OK:
+    print('   Image published')
+else:
+    print('   Timeout waiting for image publication')

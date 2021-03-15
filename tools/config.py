@@ -7,7 +7,7 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 
 # Update with the AMI id that you want to publish after TESTING
 
-PUBLISH_IMAGE_NAME='meilisearch-v0-19-0-ubuntu-2004-lts-build--11-03-2021-19-42-32' 
+PUBLISH_IMAGE_NAME='meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-14-26-16' 
 
 ### Setup environment and settings
 
