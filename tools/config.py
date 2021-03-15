@@ -1,17 +1,21 @@
 import requests
 from datetime import datetime
 
-# Update with the MeiliSearch version TAG you want to build the AMI with
+# Update with the MeiliSearch version TAG you want to build the image with
 
 MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 
-# Update with the AMI id that you want to publish after TESTING
+# Update with the custom image name that you want to publish after TESTING
 
 PUBLISH_IMAGE_NAME='meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-19-10-42' 
 
-### Setup environment and settings
+# Update with the username present in the SSH key added to gcp Compute Engine platform
+#
+# https://console.cloud.google.com/compute/metadata/sshKeys?project=meilisearchimage&authuser=1&folder&organizationId=710828868196
 
 SSH_USER='esk'
+
+### Setup environment and settings
 
 DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
 
@@ -29,14 +33,12 @@ USER_DATA =requests.get(
 SNAPSHOT_NAME="meilisearch-{}-{}".format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG,
     DEBIAN_BASE_IMAGE_FAMILY
-    ).replace('.', '-')
+).replace('.', '-')
 
 INSTANCE_BUILD_NAME="{}-build-{}".format(SNAPSHOT_NAME, datetime.now().strftime("-%d-%m-%Y-%H-%M-%S"))
 
-
 GCP_DEFAULT_PROJECT='meilisearchimage'
 GCP_DEFAULT_ZONE='us-central1-a'
-
 
 INSTANCE_TYPE='zones/{}/machineTypes/n1-standard-1'.format(GCP_DEFAULT_ZONE)
 
@@ -61,16 +63,12 @@ BUILD_INSTANCE_CONFIG = {
             "https-server"
         ],
     },
-
-    # Specify a network interface with NAT to access the public
-    # internet.
     'networkInterfaces': [{
         'network': 'global/networks/default',
         'accessConfigs': [
             {'type': 'ONE_TO_ONE_NAT', 'name': 'External NAT'}
         ]
     }],
-
     #user-data
     'metadata': {
         'items': [
