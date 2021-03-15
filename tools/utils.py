@@ -94,12 +94,13 @@ def wait_for_build_operation(cloudbuild, project, operation, timeout_seconds=Non
                 projectId=project,
                 id=operation
             ).execute()
-            if result['status'] == 'SUCCESS':
-                if 'error' in result:
-                    raise Exception(result['error'])
-                return STATUS_OK
         except Exception as e:
             print(e)
+        if result['status'] == 'SUCCESS':
+            return STATUS_OK
+        elif result['status'] == 'FAILURE':
+            print(result)
+            raise Exception('Error on build operation')
         time.sleep(1)
     return STATUS_TIMEOUT
 

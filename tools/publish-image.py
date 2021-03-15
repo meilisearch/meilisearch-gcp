@@ -16,24 +16,7 @@ compute = googleapiclient.discovery.build('compute', 'v1')
 
 export_image = cloudbuild.projects().builds().create(
     projectId='meilisearchimage',
-    body={
-        'steps': [
-            {
-                'args':[
-                    '-timeout=7000s',
-                    '-source_image={}'.format(conf.PUBLISH_IMAGE_NAME),
-                    '-client_id=api',
-                    '-format={}'.format(conf.IMAGE_FORMAT),
-                    '-destination_uri={}'.format(conf.IMAGE_DESTINATION_URI),
-                    '-compute_service_account={}'.format(conf.SERVICE_ACCOUNT_EMAIL)
-                ],
-                'name':'gcr.io/compute-image-tools/gce_vm_image_export:release',
-                'env':[
-                    'BUILD_ID=$BUILD_ID'
-                ]
-            }
-        ]
-    }
+    body=conf.EXPORT_IMAGE_CONFIG
 ).execute()
 
 print("Waiting for image export operation")
