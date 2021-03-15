@@ -83,6 +83,27 @@ def terminate_instance_and_exit(compute, project, zone, instance):
     print('ENDING PROCESS WITH EXIT CODE 1')
     exit(1)
 
+### BUILD AND PUBLISH
+
+def wait_for_build_operation(cloudbuild, project, operation, timeout_seconds=None):
+    start_time = datetime.datetime.now()
+    while timeout_seconds is None \
+        or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
+        try:
+            result = cloudbuild.projects().builds().get(
+                projectId=project,
+                id=operation
+            ).execute()
+        except Exception as e:
+            print(e)
+        if result['status'] == 'SUCCESS':
+            return STATUS_OK
+        elif result['status'] == 'FAILURE':
+            print(result)
+            raise Exception('Error on build operation')
+        time.sleep(1)
+    return STATUS_TIMEOUT
+
 ### GENERAL
 
 def check_timeout(start_time, timeout_seconds):

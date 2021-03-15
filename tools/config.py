@@ -5,12 +5,21 @@ from datetime import datetime
 
 MEILI_CLOUD_SCRIPTS_VERSION_TAG='v0.19.0'
 
+# Update with the AMI id that you want to publish after TESTING
+
+PUBLISH_IMAGE_NAME='meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-19-10-42' 
+
 ### Setup environment and settings
 
 SSH_USER='esk'
 
 DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
+
 IMAGE_DESCRIPTION_NAME="MeiliSearch-{} running on {}".format(MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
+IMAGE_FORMAT='vmdk'
+IMAGE_DESTINATION_URI='gs://meilisearch-image/meilisearch-{}-{}.{}'.format(MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY, IMAGE_FORMAT)
+IMAGE_DESTINATION_BUCKET_NAME='meilisearch-image'
+SERVICE_ACCOUNT_EMAIL='591812945139-compute@developer.gserviceaccount.com'
 
 USER_DATA =requests.get(
     'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/cloud-config.yaml'
@@ -76,3 +85,22 @@ BUILD_INSTANCE_CONFIG = {
         ]
     }
 }
+
+EXPORT_IMAGE_CONFIG={
+        'steps': [
+            {
+                'args':[
+                    '-timeout=7000s',
+                    '-source_image={}'.format(PUBLISH_IMAGE_NAME),
+                    '-client_id=api',
+                    '-format={}'.format(IMAGE_FORMAT),
+                    '-destination_uri={}'.format(IMAGE_DESTINATION_URI),
+                    '-compute_service_account={}'.format(SERVICE_ACCOUNT_EMAIL)
+                ],
+                'name':'gcr.io/compute-image-tools/gce_vm_image_export:release',
+                'env':[
+                    'BUILD_ID=$BUILD_ID'
+                ]
+            }
+        ]
+    }
