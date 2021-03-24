@@ -1,6 +1,6 @@
 from time import sleep
-import googleapiclient.discovery
 import os
+import googleapiclient.discovery
 
 import config as conf
 import utils

@@ -1,6 +1,7 @@
 import datetime
-import requests
 import time
+import sys
+import requests
 import googleapiclient.discovery
 
 import config as conf
@@ -35,7 +36,7 @@ def wait_for_health_check(instance_ip, timeout_seconds=None):
             resp = requests.get('http://{}/health'.format(instance_ip))
             if resp.status_code >= 200 and resp.status_code < 300:
                 return STATUS_OK
-        except Exception as e:
+        except Exception:
             pass
         time.sleep(1)
     return STATUS_TIMEOUT
@@ -54,8 +55,8 @@ def wait_for_zone_operation(compute, project, zone, operation, timeout_seconds=N
                 if 'error' in result:
                     raise Exception(result['error'])
                 return STATUS_OK
-        except Exception as e:
-            print(e)
+        except Exception as err:
+            print(err)
         time.sleep(1)
     return STATUS_TIMEOUT
 
@@ -72,8 +73,8 @@ def wait_for_global_operation(compute, project, operation, timeout_seconds=None)
                 if 'error' in result:
                     raise Exception(result['error'])
                 return STATUS_OK
-        except Exception as e:
-            print(e)
+        except Exception as err:
+            print(err)
         time.sleep(1)
     return STATUS_TIMEOUT
 
@@ -86,7 +87,7 @@ def terminate_instance_and_exit(compute, project, zone, instance):
         instance=instance
     ).execute()
     print('ENDING PROCESS WITH EXIT CODE 1')
-    exit(1)
+    sys.exit(1)
 
 # BUILD AND PUBLISH
 
@@ -100,11 +101,11 @@ def wait_for_build_operation(cloudbuild, project, operation, timeout_seconds=Non
                 projectId=project,
                 id=operation
             ).execute()
-        except Exception as e:
-            print(e)
+        except Exception as err:
+            print(err)
         if result['status'] == 'SUCCESS':
             return STATUS_OK
-        elif result['status'] == 'FAILURE':
+        if result['status'] == 'FAILURE':
             print(result)
             raise Exception('Error on build operation')
         time.sleep(1)
