@@ -93,10 +93,10 @@ Before running any script, make sure to [set your GCP credentials](https://cloud
 
 2. In [`tools/config.py`](tools/config.py), update the `MEILI_CLOUD_SCRIPTS_VERSION_TAG` variable value with the new MeiliSearch version you want to release, in the format: `vX.X.X`. If you want to test with a MeiliSearch RC, replace it by the right RC version tag (`vX.X.XrcX`).
 
-3. Run the [`tools/build-image.py`](tools/build-image.py) script to build the GCP custom image:
+3. Run the [`tools/build_image.py`](tools/build_image.py) script to build the GCP custom image:
 
 ```bash
-python3 tools/build-image.py
+python3 tools/build_image.py
 ```
 
 This command will create an GCP Compute Instance on MeiliSearch's account and configure it in order to prepare the MeiliSearch custom image. It will then create an Image, which should be ready to be published in the following steps. The instance will automatically be terminated after the custom image creation.<br>
@@ -113,10 +113,10 @@ Once the tests in the previous section have been done:
 
 1. Set the image name that you TESTED and you want to publish as the value of the `PUBLISH_IMAGE_NAME` in [`tools/config.py`](tools/config.py). Use the exact name of the IMAGE that you built in the previous step: `MeiliSearch-vX-X-X-ubuntu-X--lts-build--XX-XX-XXXX`. 
 
-2. Run the [`tools/publish-image.py`](tools/publish-image.py) script to export and publish the GCP image:
+2. Run the [`tools/publish_image.py`](tools/publish_image.py) script to export and publish the GCP image:
 
 ```bash
-python3 tools/publish-image.py
+python3 tools/publish_image.py
 ```
 
 3. Commit your changes on a new branch.
