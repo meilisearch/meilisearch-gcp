@@ -6,8 +6,6 @@ import config as conf
 import utils
 
 compute = googleapiclient.discovery.build('compute', 'v1')
-instance = None
-instance_ip = None
 
 # Create GCP Compute instance to setup MeiliSearch
 
