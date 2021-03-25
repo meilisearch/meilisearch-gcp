@@ -17,8 +17,8 @@ SSH_USER = 'esk'
 
 # Setup environment and settings
 
-DEBIAN_BASE_IMAGE_FAMILY = 'ubuntu-2004-lts'
-
+PROVIDER_NAME='gcp'
+DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
 IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 IMAGE_FORMAT = 'vmdk'
@@ -30,7 +30,7 @@ SERVICE_ACCOUNT_EMAIL = '591812945139-compute@developer.gserviceaccount.com'
 USER_DATA = requests.get(
     'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/cloud-config.yaml'
     .format(MEILI_CLOUD_SCRIPTS_VERSION_TAG)
-).text
+).text.replace("unknown_provider", PROVIDER_NAME)
 
 SNAPSHOT_NAME = 'meilisearch-{}-{}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG,
