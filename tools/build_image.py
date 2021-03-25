@@ -1,15 +1,13 @@
 from time import sleep
-import googleapiclient.discovery
 import os
+import googleapiclient.discovery
 
 import config as conf
 import utils
 
 compute = googleapiclient.discovery.build('compute', 'v1')
-instance = None
-instance_ip = None
 
-### Create GCP Compute instance to setup MeiliSearch
+# Create GCP Compute instance to setup MeiliSearch
 
 print('Creating GCP Compute instance')
 
@@ -22,20 +20,22 @@ instance_config = conf.BUILD_INSTANCE_CONFIG
 instance_config['disks'][0]['initializeParams']['sourceImage'] = source_image['selfLink']
 
 create = compute.instances().insert(
-        project=conf.GCP_DEFAULT_PROJECT,
-        zone=conf.GCP_DEFAULT_ZONE,
-        body=instance_config).execute()
+    project=conf.GCP_DEFAULT_PROJECT,
+    zone=conf.GCP_DEFAULT_ZONE,
+    body=instance_config).execute()
 print('   Instance created. Name: {}'.format(conf.INSTANCE_BUILD_NAME))
 
 
-### Wait for GCP instance to be 'RUNNING'
+# Wait for GCP instance to be 'RUNNING'
 
 print('Waiting for GCP Compute instance state to be "RUNNING"')
-state_code, state = utils.wait_for_instance_running(conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
+state_code, state = utils.wait_for_instance_running(
+    conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
 print('   Instance state: {}'.format(state))
 
 if state_code == utils.STATUS_OK:
-    instance = compute.instances().get(project = conf.GCP_DEFAULT_PROJECT, zone=conf.GCP_DEFAULT_ZONE, instance=conf.INSTANCE_BUILD_NAME).execute()
+    instance = compute.instances().get(project=conf.GCP_DEFAULT_PROJECT,
+                                       zone=conf.GCP_DEFAULT_ZONE, instance=conf.INSTANCE_BUILD_NAME).execute()
     instance_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
     print('   Instance IP: {}'.format(instance_ip))
 else:
@@ -47,11 +47,11 @@ else:
         instance=conf.INSTANCE_BUILD_NAME
     )
 
-### Wait for Health check after configuration is finished
+# Wait for Health check after configuration is finished
 
 print('Waiting for MeiliSearch health check (may take a few minutes: config and reboot)')
-health = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
-if health == utils.STATUS_OK:
+HEALTH = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
+if HEALTH == utils.STATUS_OK:
     print('   Instance is healthy')
 else:
     print('   Timeout waiting for health check')
@@ -62,24 +62,25 @@ else:
         instance=conf.INSTANCE_BUILD_NAME
     )
 
-### Execute deploy script via SSH
+# Execute deploy script via SSH
 
 # Add your SSH KEY to https://console.cloud.google.com/compute/metadata/sshKeys
 commands = [
-    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0} {1}'.format(conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, "GCP"),
+    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0} {1}'.format(
+        conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, 'GCP'),
 ]
 
 for cmd in commands:
-    ssh_command = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
+    SSH_COMMAND = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
         user=conf.SSH_USER,
         host=instance_ip,
         cmd=cmd,
     )
-    print("EXECUTE COMMAND:", ssh_command)
-    os.system(ssh_command)
+    print('EXECUTE COMMAND:', SSH_COMMAND)
+    os.system(SSH_COMMAND)
     sleep(5)
 
-### Stop instance before image creation
+# Stop instance before image creation
 
 print('Stopping GCP instance...')
 instance = compute.instances().get(
@@ -94,13 +95,13 @@ stop_instance_operation = compute.instances().stop(
     instance=conf.INSTANCE_BUILD_NAME
 ).execute()
 
-stopped = utils.wait_for_zone_operation(
-    compute=compute, 
-    project=conf.GCP_DEFAULT_PROJECT, 
-    zone=conf.GCP_DEFAULT_ZONE, 
+STOPPED = utils.wait_for_zone_operation(
+    compute=compute,
+    project=conf.GCP_DEFAULT_PROJECT,
+    zone=conf.GCP_DEFAULT_ZONE,
     operation=stop_instance_operation['name']
 )
-if stopped == utils.STATUS_OK:
+if STOPPED == utils.STATUS_OK:
     print('   Instance stopped')
 else:
     print('   Timeout waiting for instace stop operation')
@@ -111,7 +112,7 @@ else:
         instance=conf.INSTANCE_BUILD_NAME
     )
 
-### Create GCP Snapshot
+# Create GCP Snapshot
 
 print('Triggering MeiliSearch GCP Snapshot creation...')
 create_image_operation = compute.images().insert(
@@ -123,12 +124,12 @@ create_image_operation = compute.images().insert(
     }
 ).execute()
 
-image_creation = utils.wait_for_global_operation(
-    compute=compute, 
-    project=conf.GCP_DEFAULT_PROJECT, 
+IMAGE_CREATION = utils.wait_for_global_operation(
+    compute=compute,
+    project=conf.GCP_DEFAULT_PROJECT,
     operation=create_image_operation['name']
 )
-if image_creation == utils.STATUS_OK:
+if IMAGE_CREATION == utils.STATUS_OK:
     print('   Image created')
 else:
     print('   Timeout waiting for image creation')
@@ -139,9 +140,9 @@ else:
         instance=conf.INSTANCE_BUILD_NAME
     )
 
-### Delete instance 
+# Delete instance
 
-print("Delete instance...")
+print('Delete instance...')
 compute.instances().delete(
     project=conf.GCP_DEFAULT_PROJECT,
     zone=conf.GCP_DEFAULT_ZONE,
