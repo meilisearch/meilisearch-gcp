@@ -52,8 +52,8 @@ else:
 # Wait for Health check after configuration is finished
 
 print('Waiting for MeiliSearch health check (may take a few minutes: config and reboot)')
-health = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
-if health == utils.STATUS_OK:
+HEALTH = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
+if HEALTH == utils.STATUS_OK:
     print('   Instance is healthy')
 else:
     print('   Timeout waiting for health check')
@@ -73,13 +73,13 @@ commands = [
 ]
 
 for cmd in commands:
-    ssh_command = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
+    SSH_COMMAND = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
         user=conf.SSH_USER,
         host=instance_ip,
         cmd=cmd,
     )
-    print('EXECUTE COMMAND:', ssh_command)
-    os.system(ssh_command)
+    print('EXECUTE COMMAND:', SSH_COMMAND)
+    os.system(SSH_COMMAND)
     sleep(5)
 
 # Stop instance before image creation
@@ -97,13 +97,13 @@ stop_instance_operation = compute.instances().stop(
     instance=conf.INSTANCE_BUILD_NAME
 ).execute()
 
-stopped = utils.wait_for_zone_operation(
+STOPPED = utils.wait_for_zone_operation(
     compute=compute,
     project=conf.GCP_DEFAULT_PROJECT,
     zone=conf.GCP_DEFAULT_ZONE,
     operation=stop_instance_operation['name']
 )
-if stopped == utils.STATUS_OK:
+if STOPPED == utils.STATUS_OK:
     print('   Instance stopped')
 else:
     print('   Timeout waiting for instace stop operation')
@@ -126,12 +126,12 @@ create_image_operation = compute.images().insert(
     }
 ).execute()
 
-image_creation = utils.wait_for_global_operation(
+IMAGE_CREATION = utils.wait_for_global_operation(
     compute=compute,
     project=conf.GCP_DEFAULT_PROJECT,
     operation=create_image_operation['name']
 )
-if image_creation == utils.STATUS_OK:
+if IMAGE_CREATION == utils.STATUS_OK:
     print('   Image created')
 else:
     print('   Timeout waiting for image creation')

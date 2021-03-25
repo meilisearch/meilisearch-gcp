@@ -20,12 +20,12 @@ export_image = cloudbuild.projects().builds().create(
 ).execute()
 
 print('Waiting for image export operation')
-image_export_operation = utils.wait_for_build_operation(
+IMAGE_EXPORT_OPERATION = utils.wait_for_build_operation(
     cloudbuild=cloudbuild,
     project=conf.GCP_DEFAULT_PROJECT,
     operation=export_image['metadata']['build']['id']
 )
-if image_export_operation == utils.STATUS_OK:
+if IMAGE_EXPORT_OPERATION == utils.STATUS_OK:
     print('   Image exported: {}'.format(conf.IMAGE_DESTINATION_URI))
 else:
     print('   Timeout waiting for image export')
