@@ -19,7 +19,7 @@ SSH_USER = 'esk'
 
 DEBIAN_BASE_IMAGE_FAMILY = 'ubuntu-2004-lts'
 
-IMAGE_DESCRIPTION_NAME = "MeiliSearch-{} running on {}".format(
+IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 IMAGE_FORMAT = 'vmdk'
 IMAGE_DESTINATION_URI = 'gs://meilisearch-image/meilisearch-{}-{}.{}'.format(
@@ -32,13 +32,13 @@ USER_DATA = requests.get(
     .format(MEILI_CLOUD_SCRIPTS_VERSION_TAG)
 ).text
 
-SNAPSHOT_NAME = "meilisearch-{}-{}".format(
+SNAPSHOT_NAME = 'meilisearch-{}-{}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG,
     DEBIAN_BASE_IMAGE_FAMILY
 ).replace('.', '-')
 
-INSTANCE_BUILD_NAME = "{}-build-{}".format(
-    SNAPSHOT_NAME, datetime.now().strftime("-%d-%m-%Y-%H-%M-%S"))
+INSTANCE_BUILD_NAME = '{}-build-{}'.format(
+    SNAPSHOT_NAME, datetime.now().strftime('-%d-%m-%Y-%H-%M-%S'))
 
 GCP_DEFAULT_PROJECT = 'meilisearchimage'
 GCP_DEFAULT_ZONE = 'us-central1-a'
@@ -60,10 +60,10 @@ BUILD_INSTANCE_CONFIG = {
             }
         }
     ],
-    "tags": {
-        "items": [
-            "http-server",
-            "https-server"
+    'tags': {
+        'items': [
+            'http-server',
+            'https-server'
         ],
     },
     'networkInterfaces': [{
@@ -80,8 +80,8 @@ BUILD_INSTANCE_CONFIG = {
                 'value': USER_DATA,
             },
             {
-                "key": "block-project-ssh-keys",
-                "value": False
+                'key': 'block-project-ssh-keys',
+                'value': False
             }
         ]
     }

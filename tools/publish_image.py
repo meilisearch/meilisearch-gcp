@@ -19,7 +19,7 @@ export_image = cloudbuild.projects().builds().create(
     body=conf.EXPORT_IMAGE_CONFIG
 ).execute()
 
-print("Waiting for image export operation")
+print('Waiting for image export operation')
 image_export_operation = utils.wait_for_build_operation(
     cloudbuild=cloudbuild,
     project=conf.GCP_DEFAULT_PROJECT,
@@ -32,13 +32,13 @@ else:
 
 # Make image public
 
-print("Publishing image")
+print('Publishing image')
 bucket = storage.Client().get_bucket(conf.IMAGE_DESTINATION_BUCKET_NAME)
 policy = bucket.get_iam_policy(requested_policy_version=3)
 policy.bindings.append(
-    {"role": 'roles/storage.objectViewer', "members": {'allUsers'}})
+    {'role': 'roles/storage.objectViewer', 'members': {'allUsers'}})
 bucket.set_iam_policy(policy)
-print("   Image is now public")
+print('   Image is now public')
 
 # Delete custom image
 

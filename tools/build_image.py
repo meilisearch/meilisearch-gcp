@@ -69,7 +69,7 @@ else:
 # Add your SSH KEY to https://console.cloud.google.com/compute/metadata/sshKeys
 commands = [
     'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0} {1}'.format(
-        conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, "GCP"),
+        conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, 'GCP'),
 ]
 
 for cmd in commands:
@@ -78,7 +78,7 @@ for cmd in commands:
         host=instance_ip,
         cmd=cmd,
     )
-    print("EXECUTE COMMAND:", ssh_command)
+    print('EXECUTE COMMAND:', ssh_command)
     os.system(ssh_command)
     sleep(5)
 
@@ -144,7 +144,7 @@ else:
 
 # Delete instance
 
-print("Delete instance...")
+print('Delete instance...')
 compute.instances().delete(
     project=conf.GCP_DEFAULT_PROJECT,
     zone=conf.GCP_DEFAULT_ZONE,
