@@ -66,8 +66,8 @@ else:
 
 # Add your SSH KEY to https://console.cloud.google.com/compute/metadata/sshKeys
 commands = [
-    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0} {1}'.format(
-        conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG, 'GCP'),
+    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0}'.format(
+        conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG),
 ]
 
 for cmd in commands:
