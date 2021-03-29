@@ -74,7 +74,7 @@ def wait_for_global_operation(compute, project, operation, timeout_seconds=None)
 
 
 def terminate_instance_and_exit(compute, project, zone, instance):
-    print('   Terminating instance {}'.format(instance.id))
+    print('   Terminating instance {}'.format(instance))
     compute.instances().delete(
         project=project,
         zone=zone,
