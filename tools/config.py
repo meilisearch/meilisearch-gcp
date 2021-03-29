@@ -9,16 +9,9 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.19.0'
 
 PUBLISH_IMAGE_NAME = 'meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-19-10-42'
 
-# Update with the username present in the SSH key added to gcp Compute Engine platform
-#
-# https://console.cloud.google.com/compute/metadata/sshKeys?project=meilisearchimage&authuser=1&folder&organizationId=710828868196
-
-SSH_USER = 'esk'
-
 # Setup environment and settings
 
-PROVIDER_NAME='gcp'
-DEBIAN_BASE_IMAGE_FAMILY='ubuntu-2004-lts'
+DEBIAN_BASE_IMAGE_FAMILY = 'ubuntu-2004-lts'
 IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 IMAGE_FORMAT = 'vmdk'
@@ -28,9 +21,9 @@ IMAGE_DESTINATION_BUCKET_NAME = 'meilisearch-image'
 SERVICE_ACCOUNT_EMAIL = '591812945139-compute@developer.gserviceaccount.com'
 
 USER_DATA = requests.get(
-    'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/cloud-config.yaml'
+    'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/providers/gcp/cloud-config.yaml'
     .format(MEILI_CLOUD_SCRIPTS_VERSION_TAG)
-).text.replace("unknown_provider", PROVIDER_NAME)
+).text
 
 SNAPSHOT_NAME = 'meilisearch-{}-{}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG,
