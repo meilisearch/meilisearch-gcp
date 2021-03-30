@@ -1,7 +1,4 @@
-from time import sleep
-import os
 import googleapiclient.discovery
-
 import config as conf
 import utils
 
@@ -61,24 +58,6 @@ else:
         zone=conf.GCP_DEFAULT_ZONE,
         instance=conf.INSTANCE_BUILD_NAME
     )
-
-# Execute deploy script via SSH
-
-# Add your SSH KEY to https://console.cloud.google.com/compute/metadata/sshKeys
-commands = [
-    'curl https://raw.githubusercontent.com/meilisearch/cloud-scripts/{0}/scripts/deploy-meilisearch.sh | sudo bash -s {0}'.format(
-        conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG),
-]
-
-for cmd in commands:
-    SSH_COMMAND = 'ssh {user}@{host} -o StrictHostKeyChecking=no "{cmd}"'.format(
-        user=conf.SSH_USER,
-        host=instance_ip,
-        cmd=cmd,
-    )
-    print('EXECUTE COMMAND:', SSH_COMMAND)
-    os.system(SSH_COMMAND)
-    sleep(5)
 
 # Stop instance before image creation
 
