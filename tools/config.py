@@ -11,7 +11,6 @@ PUBLISH_IMAGE_NAME = 'meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-19-1
 
 # Setup environment and settings
 
-PROVIDER_NAME='gcp'
 DEBIAN_BASE_IMAGE_PROJECT='debian-cloud'
 DEBIAN_BASE_IMAGE_FAMILY='debian-10'
 IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
