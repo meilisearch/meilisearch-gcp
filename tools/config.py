@@ -11,7 +11,8 @@ PUBLISH_IMAGE_NAME = 'meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-19-1
 
 # Setup environment and settings
 
-DEBIAN_BASE_IMAGE_FAMILY = 'ubuntu-2004-lts'
+DEBIAN_BASE_IMAGE_PROJECT='debian-cloud'
+DEBIAN_BASE_IMAGE_FAMILY='debian-10'
 IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 IMAGE_FORMAT = 'vmdk'
@@ -39,6 +40,28 @@ GCP_DEFAULT_ZONE = 'us-central1-a'
 INSTANCE_TYPE = 'zones/{}/machineTypes/n1-standard-1'.format(GCP_DEFAULT_ZONE)
 
 MEILISEARCH_LOGO_URL = 'https://github.com/meilisearch/integration-guides/blob/main/assets/logos/logo.svg'
+
+# SEE: https://blog.woohoosvcs.com/2019/11/cloud-init-on-google-compute-engine/
+STARTUP_SCRIPT = """
+#!/bin/bash
+
+if ! type cloud-init > /dev/null 2>&1 ; then
+  echo "Ran - `date`" >> /root/startup
+  sleep 30
+  apt install -y cloud-init
+
+  if [ $? == 0 ]; then
+    echo "Ran - Success - `date`" >> /root/startup
+    systemctl enable cloud-init
+    #systemctl start cloud-init
+  else
+    echo "Ran - Fail - `date`" >> /root/startup
+  fi
+
+  # Reboot either way
+  reboot
+fi
+"""
 
 # DOCS: https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
 BUILD_INSTANCE_CONFIG = {
@@ -71,6 +94,10 @@ BUILD_INSTANCE_CONFIG = {
             {
                 'key': 'user-data',
                 'value': USER_DATA,
+            },
+            {
+                'key': 'startup-script',
+                'value': STARTUP_SCRIPT
             },
             {
                 'key': 'block-project-ssh-keys',

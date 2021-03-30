@@ -9,7 +9,7 @@ compute = googleapiclient.discovery.build('compute', 'v1')
 print('Creating GCP Compute instance')
 
 source_image = compute.images().getFromFamily(
-    project='ubuntu-os-cloud',
+    project=conf.DEBIAN_BASE_IMAGE_PROJECT,
     family=conf.DEBIAN_BASE_IMAGE_FAMILY
 ).execute()
 
