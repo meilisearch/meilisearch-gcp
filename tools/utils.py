@@ -42,6 +42,15 @@ def wait_for_health_check(instance_ip, timeout_seconds=None):
     return STATUS_TIMEOUT
 
 
+def check_meilisearch_version(instance_ip, version):
+    resp = requests.get(
+        "http://{}/version".format(instance_ip)).json()
+    if resp["pkgVersion"] in version:
+        return
+    raise Exception(
+        "    The version of meilisearch ({}) does not match the instance ({})".format(version, resp["pkgVersion"]))
+
+
 def wait_for_zone_operation(compute, project, zone, operation, timeout_seconds=None):
     start_time = datetime.datetime.now()
     while timeout_seconds is None \
