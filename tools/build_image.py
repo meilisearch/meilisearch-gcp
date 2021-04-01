@@ -1,3 +1,4 @@
+import sys
 import googleapiclient.discovery
 import config as conf
 import utils
@@ -59,6 +60,22 @@ else:
         instance=conf.INSTANCE_BUILD_NAME
     )
 
+# Check version
+
+print('Waiting for Version check')
+try:
+    utils.check_meilisearch_version(
+        instance_ip, conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG)
+except Exception as err:
+    print("   Exception: {}".format(err))
+    utils.terminate_instance_and_exit(
+        compute=compute,
+        project=conf.GCP_DEFAULT_PROJECT,
+        zone=conf.GCP_DEFAULT_ZONE,
+        instance=conf.INSTANCE_BUILD_NAME
+    )
+print('   Version of meilisearch match!')
+
 # Stop instance before image creation
 
 print('Stopping GCP instance...')
@@ -93,11 +110,16 @@ else:
 
 # Create GCP Snapshot
 
+if len(sys.argv) > 1:
+    SNAPSHOT_NAME = sys.argv[1]
+else:
+    SNAPSHOT_NAME = conf.INSTANCE_BUILD_NAME
+
 print('Triggering MeiliSearch GCP Snapshot creation...')
 create_image_operation = compute.images().insert(
     project=conf.GCP_DEFAULT_PROJECT,
     body={
-        'name': conf.INSTANCE_BUILD_NAME,
+        'name': SNAPSHOT_NAME,
         'sourceDisk': instance['disks'][0]['source'],
         'description': conf.IMAGE_DESCRIPTION_NAME,
     }
@@ -127,3 +149,4 @@ compute.instances().delete(
     zone=conf.GCP_DEFAULT_ZONE,
     instance=conf.INSTANCE_BUILD_NAME
 ).execute()
+print('Instance deleted')
