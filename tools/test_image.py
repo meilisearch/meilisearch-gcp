@@ -18,15 +18,11 @@ print("Running test for image named: {name}...".format(
 source_image = compute.images().get(project=conf.GCP_DEFAULT_PROJECT,
                                     image=SNAPSHOT_NAME).execute()
 
-if source_image is None:
-    raise Exception("Couldn't find the specified image: {}".format(
-        SNAPSHOT_NAME))
-
 # Create GCP Compute instance to test MeiliSearch image
 
 print('Creating GCP Compute instance')
 
-instance_config = conf.BUILD_INSTANCE_CONFIG
+instance_config = conf.BUILD_INSTANCE_TEST_CONFIG
 instance_config['disks'][0]['initializeParams']['sourceImage'] = source_image['selfLink']
 
 create = compute.instances().insert(

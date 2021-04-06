@@ -17,5 +17,4 @@ print("Destroying image named: {name}...".format(
 print('Deleting image...')
 delete = compute.images().delete(project=conf.GCP_DEFAULT_PROJECT,
                                  image=SNAPSHOT_NAME).execute()
-print(delete)
 print('Image deleted')
