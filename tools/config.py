@@ -11,8 +11,8 @@ PUBLISH_IMAGE_NAME = 'meilisearch-v0-19-0-ubuntu-2004-lts-build--15-03-2021-19-1
 
 # Setup environment and settings
 
-DEBIAN_BASE_IMAGE_PROJECT='debian-cloud'
-DEBIAN_BASE_IMAGE_FAMILY='debian-10'
+DEBIAN_BASE_IMAGE_PROJECT = 'debian-cloud'
+DEBIAN_BASE_IMAGE_FAMILY = 'debian-10'
 IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 IMAGE_FORMAT = 'vmdk'
@@ -53,7 +53,6 @@ if ! type cloud-init > /dev/null 2>&1 ; then
   if [ $? == 0 ]; then
     echo "Ran - Success - `date`" >> /root/startup
     systemctl enable cloud-init
-    #systemctl start cloud-init
   else
     echo "Ran - Fail - `date`" >> /root/startup
   fi
@@ -99,6 +98,41 @@ BUILD_INSTANCE_CONFIG = {
                 'key': 'startup-script',
                 'value': STARTUP_SCRIPT
             },
+            {
+                'key': 'block-project-ssh-keys',
+                'value': False
+            }
+        ]
+    }
+}
+
+# DOCS: https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
+BUILD_INSTANCE_TEST_CONFIG = {
+    'name': INSTANCE_BUILD_NAME,
+    'machineType': INSTANCE_TYPE,
+    'disks': [
+        {
+            'boot': True,
+            'autoDelete': True,
+            'initializeParams': {
+                'sourceImage': '',
+            }
+        }
+    ],
+    'tags': {
+        'items': [
+            'http-server',
+            'https-server'
+        ],
+    },
+    'networkInterfaces': [{
+        'network': 'global/networks/default',
+        'accessConfigs': [
+            {'type': 'ONE_TO_ONE_NAT', 'name': 'External NAT'}
+        ]
+    }],
+    'metadata': {
+        'items': [
             {
                 'key': 'block-project-ssh-keys',
                 'value': False

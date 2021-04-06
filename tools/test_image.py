@@ -5,16 +5,24 @@ import utils
 
 compute = googleapiclient.discovery.build('compute', 'v1')
 
-# Create GCP Compute instance to setup MeiliSearch
+if len(sys.argv) > 1:
+    SNAPSHOT_NAME = sys.argv[1]
+else:
+    raise Exception("No snapshot name specified")
+
+print("Running test for image named: {name}...".format(
+    name=SNAPSHOT_NAME))
+
+# Get the image for the test
+
+source_image = compute.images().get(project=conf.GCP_DEFAULT_PROJECT,
+                                    image=SNAPSHOT_NAME).execute()
+
+# Create GCP Compute instance to test MeiliSearch image
 
 print('Creating GCP Compute instance')
 
-source_image = compute.images().getFromFamily(
-    project=conf.DEBIAN_BASE_IMAGE_PROJECT,
-    family=conf.DEBIAN_BASE_IMAGE_FAMILY
-).execute()
-
-instance_config = conf.BUILD_INSTANCE_CONFIG
+instance_config = conf.BUILD_INSTANCE_TEST_CONFIG
 instance_config['disks'][0]['initializeParams']['sourceImage'] = source_image['selfLink']
 
 create = compute.instances().insert(
@@ -76,7 +84,7 @@ except Exception as err:
     )
 print('   Version of meilisearch match!')
 
-# Stop instance before image creation
+# Stop instance
 
 print('Stopping GCP instance...')
 instance = compute.instances().get(
@@ -101,39 +109,6 @@ if STOPPED == utils.STATUS_OK:
     print('   Instance stopped')
 else:
     print('   Timeout waiting for instace stop operation')
-    utils.terminate_instance_and_exit(
-        compute=compute,
-        project=conf.GCP_DEFAULT_PROJECT,
-        zone=conf.GCP_DEFAULT_ZONE,
-        instance=conf.INSTANCE_BUILD_NAME
-    )
-
-# Create GCP Snapshot
-
-if len(sys.argv) > 1:
-    SNAPSHOT_NAME = sys.argv[1]
-else:
-    SNAPSHOT_NAME = conf.INSTANCE_BUILD_NAME
-
-print('Triggering MeiliSearch GCP Snapshot creation...')
-create_image_operation = compute.images().insert(
-    project=conf.GCP_DEFAULT_PROJECT,
-    body={
-        'name': SNAPSHOT_NAME,
-        'sourceDisk': instance['disks'][0]['source'],
-        'description': conf.IMAGE_DESCRIPTION_NAME,
-    }
-).execute()
-
-IMAGE_CREATION = utils.wait_for_global_operation(
-    compute=compute,
-    project=conf.GCP_DEFAULT_PROJECT,
-    operation=create_image_operation['name']
-)
-if IMAGE_CREATION == utils.STATUS_OK:
-    print('   Image created')
-else:
-    print('   Timeout waiting for image creation')
     utils.terminate_instance_and_exit(
         compute=compute,
         project=conf.GCP_DEFAULT_PROJECT,
