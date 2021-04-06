@@ -53,7 +53,6 @@ if ! type cloud-init > /dev/null 2>&1 ; then
   if [ $? == 0 ]; then
     echo "Ran - Success - `date`" >> /root/startup
     systemctl enable cloud-init
-    #systemctl start cloud-init
   else
     echo "Ran - Fail - `date`" >> /root/startup
   fi
