@@ -104,10 +104,10 @@ Before running any script, make sure to [set your GCP credentials](https://cloud
 
 2. In [`tools/config.py`](tools/config.py), update the `MEILI_CLOUD_SCRIPTS_VERSION_TAG` variable value with the new MeiliSearch version you want to release, in the format: `vX.X.X`. If you want to test with a MeiliSearch RC, replace it by the right RC version tag (`vX.X.XrcX`).
 
-3. Run the [`tools/build_image.py`](tools/build_image.py) script to build the GCP custom image:
+3. Run the [`tools/build_image.py`](tools/build_image.py) script to build the GCP custom image without analytics:
 
 ```bash
-python3 tools/build_image.py
+python3 tools/build_image.py --no-analytics
 ```
 
 This command will create an GCP Compute Instance on MeiliSearch's account and configure it in order to prepare the MeiliSearch custom image. It will then create an Image, which should be ready to be published in the following steps. The instance will automatically be terminated after the custom image creation.<br>
@@ -115,6 +115,12 @@ The image name will be `MeiliSearch-vX-X-X-ubuntu-X--lts-build--XX-XX-XXXX`.
 
 4. Test the image: create a new GCP Compute instance based on the new image `MeiliSearch-vX-X-X-ubuntu-X--lts-build--XX-XX-XXXX`, and make sure everything is running smoothly. Remember to check the following checkboxes: `Allow HTTP traffic` and `Allow HTTPS traffic`. Connect via SSH to the droplet and test the configuration script that is run automatically on login. Use the same username defined in the step 1 and in the SSH key you have set on GCP.<br>
 🗑 Don't forget to destroy the Droplet after the test.
+
+5. When you are ready to create the final image to release juste remove the `--no-analytics` option
+
+```bash
+python3 tools/build_image.py
+```
 
 ### Publish the GCP image and Release <!-- omit in TOC -->
 

@@ -5,6 +5,14 @@ import utils
 
 compute = googleapiclient.discovery.build('compute', 'v1')
 
+# Remove analytics for CI jobs
+
+if len(sys.argv) > 1 and '--no-analytics' in sys.argv:
+    print('Launch build image without analytics.')
+    BUILD_INSTANCE_CONFIG = conf.BUILD_INSTANCE_CONFIG_NO_ANALYTICS
+else:
+    BUILD_INSTANCE_CONFIG = conf.BUILD_INSTANCE_CONFIG
+
 # Create GCP Compute instance to setup MeiliSearch
 
 print('Creating GCP Compute instance')
@@ -14,7 +22,7 @@ source_image = compute.images().getFromFamily(
     family=conf.DEBIAN_BASE_IMAGE_FAMILY
 ).execute()
 
-instance_config = conf.BUILD_INSTANCE_CONFIG
+instance_config = BUILD_INSTANCE_CONFIG
 instance_config['disks'][0]['initializeParams']['sourceImage'] = source_image['selfLink']
 
 create = compute.instances().insert(
@@ -110,7 +118,7 @@ else:
 
 # Create GCP Snapshot
 
-if len(sys.argv) > 1:
+if len(sys.argv) > 1 and sys.argv[1] != '--no-analytics':
     SNAPSHOT_NAME = sys.argv[1]
 else:
     SNAPSHOT_NAME = conf.INSTANCE_BUILD_NAME

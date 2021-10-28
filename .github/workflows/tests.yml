@@ -32,7 +32,7 @@ jobs:
     - name: Set image name as env variable
       run: echo "IMAGE_NAME=meilisearch-gcp-ci-test-$(date +'%d-%m-%Y-%H-%M-%S')" >> $GITHUB_ENV
     - name: Build image
-      run: python3 tools/build_image.py $IMAGE_NAME
+      run: python3 tools/build_image.py $IMAGE_NAME --no-analytics
     - name: Test image
       run: python3 tools/test_image.py $IMAGE_NAME
     - name: Clean image
