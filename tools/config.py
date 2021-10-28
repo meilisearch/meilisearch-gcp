@@ -26,9 +26,6 @@ USER_DATA = requests.get(
     .format(MEILI_CLOUD_SCRIPTS_VERSION_TAG)
 ).text
 
-index = USER_DATA.find('--env development')
-USER_DATA_NO_ANALYTICS = USER_DATA[:index] + '--no-analytics=true ' + USER_DATA[index:]
-
 SNAPSHOT_NAME = 'meilisearch-{}-{}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG,
     DEBIAN_BASE_IMAGE_FAMILY
@@ -136,49 +133,6 @@ BUILD_INSTANCE_TEST_CONFIG = {
     }],
     'metadata': {
         'items': [
-            {
-                'key': 'block-project-ssh-keys',
-                'value': False
-            }
-        ]
-    }
-}
-
-BUILD_INSTANCE_CONFIG_NO_ANALYTICS = {
-    'name': INSTANCE_BUILD_NAME,
-    'machineType': INSTANCE_TYPE,
-    'disks': [
-        {
-            'boot': True,
-            'autoDelete': True,
-            'initializeParams': {
-                'sourceImage': '',
-            }
-        }
-    ],
-    'tags': {
-        'items': [
-            'http-server',
-            'https-server'
-        ],
-    },
-    'networkInterfaces': [{
-        'network': 'global/networks/default',
-        'accessConfigs': [
-            {'type': 'ONE_TO_ONE_NAT', 'name': 'External NAT'}
-        ]
-    }],
-    # user-data
-    'metadata': {
-        'items': [
-            {
-                'key': 'user-data',
-                'value': USER_DATA_NO_ANALYTICS,
-            },
-            {
-                'key': 'startup-script',
-                'value': STARTUP_SCRIPT
-            },
             {
                 'key': 'block-project-ssh-keys',
                 'value': False
