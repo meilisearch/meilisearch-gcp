@@ -22,7 +22,7 @@
 
 **Meilisearch GCP** is a set of tools and scripts to improve user deployment of Meilisearch on [Google Cloud Platform](https://cloud.google.com).
 
-**Meilisearch** is an open-source search engine. [Discover what Meilisearch is!](https://github.com/meilisearch/Meilisearch)
+**Meilisearch** is an open-source search engine. [Discover what Meilisearch is!](https://github.com/meilisearch/meilisearch)
 
 ## Table of Contents <!-- omit in toc -->
 
