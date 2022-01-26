@@ -15,7 +15,7 @@ if len(sys.argv) > 1 and '--no-analytics' in sys.argv:
         index = conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'].find('--env development')
         conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'] = conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'][:index] + '--no-analytics=true ' + conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'][index:]
 
-# Create GCP Compute instance to setup MeiliSearch
+# Create GCP Compute instance to setup Meilisearch
 
 print('Creating GCP Compute instance')
 
@@ -57,7 +57,7 @@ else:
 
 # Wait for Health check after configuration is finished
 
-print('Waiting for MeiliSearch health check (may take a few minutes: config and reboot)')
+print('Waiting for Meilisearch health check (may take a few minutes: config and reboot)')
 HEALTH = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
 if HEALTH == utils.STATUS_OK:
     print('   Instance is healthy')
@@ -84,7 +84,7 @@ except Exception as err:
         zone=conf.GCP_DEFAULT_ZONE,
         instance=conf.INSTANCE_BUILD_NAME
     )
-print('   Version of meilisearch match!')
+print('   Version of Meilisearch match!')
 
 # Stop instance before image creation
 
@@ -125,7 +125,7 @@ if len(sys.argv) > 1 and sys.argv[1] != '--no-analytics':
 else:
     SNAPSHOT_NAME = conf.INSTANCE_BUILD_NAME
 
-print('Triggering MeiliSearch GCP Snapshot creation...')
+print('Triggering Meilisearch GCP Snapshot creation...')
 create_image_operation = compute.images().insert(
     project=conf.GCP_DEFAULT_PROJECT,
     body={

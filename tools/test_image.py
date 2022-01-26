@@ -18,7 +18,7 @@ print("Running test for image named: {name}...".format(
 source_image = compute.images().get(project=conf.GCP_DEFAULT_PROJECT,
                                     image=SNAPSHOT_NAME).execute()
 
-# Create GCP Compute instance to test MeiliSearch image
+# Create GCP Compute instance to test Meilisearch image
 
 print('Creating GCP Compute instance')
 
@@ -55,7 +55,7 @@ else:
 
 # Wait for Health check after configuration is finished
 
-print('Waiting for MeiliSearch health check (may take a few minutes: config and reboot)')
+print('Waiting for Meilisearch health check (may take a few minutes: config and reboot)')
 HEALTH = utils.wait_for_health_check(instance_ip, timeout_seconds=600)
 if HEALTH == utils.STATUS_OK:
     print('   Instance is healthy')
@@ -82,7 +82,7 @@ except Exception as err:
         zone=conf.GCP_DEFAULT_ZONE,
         instance=conf.INSTANCE_BUILD_NAME
     )
-print('   Version of meilisearch match!')
+print('   Version of Meilisearch match!')
 
 # Stop instance
 
