@@ -1,7 +1,7 @@
 from datetime import datetime
 import requests
 
-# Update with the MeiliSearch version TAG you want to build the image with
+# Update with the Meilisearch version TAG you want to build the image with
 
 MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.25.2'
 
@@ -13,7 +13,7 @@ PUBLISH_IMAGE_NAME = 'meilisearch-v0-25-2-debian-10-build--01-02-2022-12-03-19'
 
 DEBIAN_BASE_IMAGE_PROJECT = 'debian-cloud'
 DEBIAN_BASE_IMAGE_FAMILY = 'debian-10'
-IMAGE_DESCRIPTION_NAME = 'MeiliSearch-{} running on {}'.format(
+IMAGE_DESCRIPTION_NAME = 'Meilisearch-{} running on {}'.format(
     MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
 IMAGE_FORMAT = 'vmdk'
 IMAGE_DESTINATION_URI = 'gs://meilisearch-image/meilisearch-{}-{}.{}'.format(
