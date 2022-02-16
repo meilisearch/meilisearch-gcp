@@ -13,7 +13,7 @@ if len(sys.argv) > 1 and '--no-analytics' in sys.argv:
     test = conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value']
     if '--env development' in conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value']:
         index = conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'].find('--env development')
-        conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'] = conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'][:index] + '--no-analytics=true ' + conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'][index:]
+        conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'] = conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'][:index] + '--no-analytics ' + conf.BUILD_INSTANCE_CONFIG['metadata']['items'][0]['value'][index:]
 
 # Create GCP Compute instance to setup Meilisearch
 
