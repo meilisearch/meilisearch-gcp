@@ -1,6 +1,6 @@
 cachetools==4.2.1
 certifi==2020.12.5
-cffi==1.14.5
+cffi==1.15.0
 chardet==4.0.0
 google-api-core==1.26.0
 google-api-python-client==1.12.8
