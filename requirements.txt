@@ -3,7 +3,7 @@ certifi==2022.5.18.1
 cffi==1.15.0
 chardet==4.0.0
 google-api-core==1.26.0
-google-api-python-client==1.12.8
+google-api-python-client==2.49.0
 google-auth==1.27.0
 google-auth-httplib2==0.1.0
 google-cloud-core==1.6.0
