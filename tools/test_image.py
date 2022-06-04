@@ -8,10 +8,9 @@ compute = googleapiclient.discovery.build('compute', 'v1')
 if len(sys.argv) > 1:
     SNAPSHOT_NAME = sys.argv[1]
 else:
-    raise Exception("No snapshot name specified")
+    raise Exception('No snapshot name specified')
 
-print("Running test for image named: {name}...".format(
-    name=SNAPSHOT_NAME))
+print(f'Running test for image named: {SNAPSHOT_NAME}...')
 
 # Get the image for the test
 
@@ -29,23 +28,22 @@ create = compute.instances().insert(
     project=conf.GCP_DEFAULT_PROJECT,
     zone=conf.GCP_DEFAULT_ZONE,
     body=instance_config).execute()
-print('   Instance created. Name: {}'.format(conf.INSTANCE_BUILD_NAME))
-
+print(f'   Instance created. Name: {conf.INSTANCE_BUILD_NAME}')
 
 # Wait for GCP instance to be 'RUNNING'
 
 print('Waiting for GCP Compute instance state to be "RUNNING"')
 state_code, state = utils.wait_for_instance_running(
     conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
-print('   Instance state: {}'.format(state))
+print(f'   Instance state: {state}')
 
 if state_code == utils.STATUS_OK:
     instance = compute.instances().get(project=conf.GCP_DEFAULT_PROJECT,
                                        zone=conf.GCP_DEFAULT_ZONE, instance=conf.INSTANCE_BUILD_NAME).execute()
     instance_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
-    print('   Instance IP: {}'.format(instance_ip))
+    print(f'   Instance IP: {instance_ip}')
 else:
-    print('   Error: {}. State: {}.'.format(state_code, state))
+    print(f'   Error: {state_code}. State: {state}.')
     utils.terminate_instance_and_exit(
         compute=compute,
         project=conf.GCP_DEFAULT_PROJECT,
@@ -75,7 +73,7 @@ try:
     utils.check_meilisearch_version(
         instance_ip, conf.MEILI_CLOUD_SCRIPTS_VERSION_TAG)
 except Exception as err:
-    print("   Exception: {}".format(err))
+    print(f'   Exception: {err}')
     utils.terminate_instance_and_exit(
         compute=compute,
         project=conf.GCP_DEFAULT_PROJECT,

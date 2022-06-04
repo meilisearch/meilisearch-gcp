@@ -26,7 +26,7 @@ IMAGE_EXPORT_OPERATION = utils.wait_for_build_operation(
     operation=export_image['metadata']['build']['id']
 )
 if IMAGE_EXPORT_OPERATION == utils.STATUS_OK:
-    print('   Image exported: {}'.format(conf.IMAGE_DESTINATION_URI))
+    print(f'   Image exported: {conf.IMAGE_DESTINATION_URI}')
 else:
     print('   Timeout waiting for image export')
 

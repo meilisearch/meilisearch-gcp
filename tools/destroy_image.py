@@ -7,10 +7,9 @@ compute = googleapiclient.discovery.build('compute', 'v1')
 if len(sys.argv) > 1:
     SNAPSHOT_NAME = sys.argv[1]
 else:
-    raise Exception("No snapshot name specified")
+    raise Exception('No snapshot name specified')
 
-print("Destroying image named: {name}...".format(
-    name=SNAPSHOT_NAME))
+print(f'Destroying image named: {SNAPSHOT_NAME}...')
 
 # Destroy image
 
