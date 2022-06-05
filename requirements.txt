@@ -17,12 +17,12 @@ packaging==21.3
 protobuf==3.15.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pycparser==2.20
+pycparser==2.21
 pylint==2.7.2
-pyparsing==2.4.7
-pytz==2021.1
+pyparsing==3.0.9
+pytz==2022.1
 requests==2.27.1
 rsa==4.8
-six==1.15.0
+six==1.16.0
 uritemplate==3.0.1
 urllib3==1.26.9
