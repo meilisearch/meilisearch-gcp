@@ -33,7 +33,7 @@ def wait_for_health_check(instance_ip, timeout_seconds=None):
     while timeout_seconds is None \
             or check_timeout(start_time, timeout_seconds) is not STATUS_TIMEOUT:
         try:
-            resp = requests.get('http://{}/health'.format(instance_ip))
+            resp = requests.get(f'http://{instance_ip}/health')
             if resp.status_code >= 200 and resp.status_code < 300:
                 return STATUS_OK
         except Exception:
@@ -44,11 +44,11 @@ def wait_for_health_check(instance_ip, timeout_seconds=None):
 
 def check_meilisearch_version(instance_ip, version):
     resp = requests.get(
-        "http://{}/version".format(instance_ip)).json()
-    if resp["pkgVersion"] in version:
+        f'http://{instance_ip}/version').json()
+    if resp['pkgVersion'] in version:
         return
     raise Exception(
-        "    The version of meilisearch ({}) does not match the instance ({})".format(version, resp["pkgVersion"]))
+        f"    The version of meilisearch ({version}) does not match the instance ({resp['pkgVersion']})")
 
 
 def wait_for_zone_operation(compute, project, zone, operation, timeout_seconds=None):
@@ -89,7 +89,7 @@ def wait_for_global_operation(compute, project, operation, timeout_seconds=None)
 
 
 def terminate_instance_and_exit(compute, project, zone, instance):
-    print('   Terminating instance {}'.format(instance))
+    print(f'   Terminating instance {instance}')
     compute.instances().delete(
         project=project,
         zone=zone,

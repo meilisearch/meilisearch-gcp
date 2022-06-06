@@ -13,31 +13,24 @@ PUBLISH_IMAGE_NAME = 'meilisearch-v0-27-1-debian-10-build--18-05-2022-14-47-56'
 
 DEBIAN_BASE_IMAGE_PROJECT = 'debian-cloud'
 DEBIAN_BASE_IMAGE_FAMILY = 'debian-10'
-IMAGE_DESCRIPTION_NAME = 'Meilisearch-{} running on {}'.format(
-    MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY)
+IMAGE_DESCRIPTION_NAME = f'Meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG} running on {DEBIAN_BASE_IMAGE_FAMILY}'
 IMAGE_FORMAT = 'vmdk'
-IMAGE_DESTINATION_URI = 'gs://meilisearch-image/meilisearch-{}-{}.{}'.format(
-    MEILI_CLOUD_SCRIPTS_VERSION_TAG, DEBIAN_BASE_IMAGE_FAMILY, IMAGE_FORMAT)
+IMAGE_DESTINATION_URI = f'gs://meilisearch-image/meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG}-{DEBIAN_BASE_IMAGE_FAMILY}.{IMAGE_FORMAT}'
 IMAGE_DESTINATION_BUCKET_NAME = 'meilisearch-image'
 SERVICE_ACCOUNT_EMAIL = '591812945139-compute@developer.gserviceaccount.com'
 
 USER_DATA = requests.get(
-    'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{}/scripts/providers/gcp/cloud-config.yaml'
-    .format(MEILI_CLOUD_SCRIPTS_VERSION_TAG)
+    f'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{MEILI_CLOUD_SCRIPTS_VERSION_TAG}/scripts/providers/gcp/cloud-config.yaml'
 ).text
 
-SNAPSHOT_NAME = 'meilisearch-{}-{}'.format(
-    MEILI_CLOUD_SCRIPTS_VERSION_TAG,
-    DEBIAN_BASE_IMAGE_FAMILY
-).replace('.', '-')
+SNAPSHOT_NAME = f'meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG}-{DEBIAN_BASE_IMAGE_FAMILY}'.replace('.', '-')
 
-INSTANCE_BUILD_NAME = '{}-build-{}'.format(
-    SNAPSHOT_NAME, datetime.now().strftime('-%d-%m-%Y-%H-%M-%S'))
+INSTANCE_BUILD_NAME = f"{SNAPSHOT_NAME}-build-{datetime.now().strftime('-%d-%m-%Y-%H-%M-%S')}"
 
 GCP_DEFAULT_PROJECT = 'meilisearchimage'
 GCP_DEFAULT_ZONE = 'us-central1-a'
 
-INSTANCE_TYPE = 'zones/{}/machineTypes/n1-standard-1'.format(GCP_DEFAULT_ZONE)
+INSTANCE_TYPE = f'zones/{GCP_DEFAULT_ZONE}/machineTypes/n1-standard-1'
 
 MEILISEARCH_LOGO_URL = 'https://github.com/meilisearch/integration-guides/blob/main/assets/logos/logo.svg'
 
@@ -146,11 +139,11 @@ EXPORT_IMAGE_CONFIG = {
         {
             'args': [
                 '-timeout=7000s',
-                '-source_image={}'.format(PUBLISH_IMAGE_NAME),
+                f'-source_image={PUBLISH_IMAGE_NAME}'
                 '-client_id=api',
-                '-format={}'.format(IMAGE_FORMAT),
-                '-destination_uri={}'.format(IMAGE_DESTINATION_URI),
-                '-compute_service_account={}'.format(SERVICE_ACCOUNT_EMAIL)
+                f'-format={IMAGE_FORMAT}'
+                f'-destination_uri={IMAGE_DESTINATION_URI}'
+                f'-compute_service_account={SERVICE_ACCOUNT_EMAIL}'
             ],
             'name':'gcr.io/compute-image-tools/gce_vm_image_export:release',
             'env':[
