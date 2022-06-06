@@ -44,8 +44,8 @@ def wait_for_health_check(instance_ip, timeout_seconds=None):
 
 def check_meilisearch_version(instance_ip, version):
     resp = requests.get(
-        f"http://{instance_ip}/version").json()
-    if resp["pkgVersion"] in version:
+        f'http://{instance_ip}/version').json()
+    if resp['pkgVersion'] in version:
         return
     raise Exception(
         f"    The version of meilisearch ({version}) does not match the instance ({resp['pkgVersion']})")
