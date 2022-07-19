@@ -3,11 +3,11 @@ import requests
 
 # Update with the Meilisearch version TAG you want to build the image with
 
-MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.27.1'
+MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.28.0'
 
 # Update with the custom image name that you want to publish after TESTING
 
-PUBLISH_IMAGE_NAME = 'meilisearch-v0-27-1-debian-10-build--18-05-2022-14-47-56'
+PUBLISH_IMAGE_NAME = 'meilisearch-v0-28-0-debian-10-build--18-07-2022-14-48-17'
 
 # Setup environment and settings
 
@@ -17,7 +17,7 @@ IMAGE_DESCRIPTION_NAME = f'Meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG} running
 IMAGE_FORMAT = 'vmdk'
 IMAGE_DESTINATION_URI = f'gs://meilisearch-image/meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG}-{DEBIAN_BASE_IMAGE_FAMILY}.{IMAGE_FORMAT}'
 IMAGE_DESTINATION_BUCKET_NAME = 'meilisearch-image'
-SERVICE_ACCOUNT_EMAIL = '591812945139-compute@developer.gserviceaccount.com'
+SERVICE_ACCOUNT_EMAIL = '591812945139@cloudbuild.gserviceaccount.com'
 
 USER_DATA = requests.get(
     f'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{MEILI_CLOUD_SCRIPTS_VERSION_TAG}/scripts/providers/gcp/cloud-config.yaml'
@@ -139,10 +139,10 @@ EXPORT_IMAGE_CONFIG = {
         {
             'args': [
                 '-timeout=7000s',
-                f'-source_image={PUBLISH_IMAGE_NAME}'
+                f'-source_image={PUBLISH_IMAGE_NAME}',
                 '-client_id=api',
-                f'-format={IMAGE_FORMAT}'
-                f'-destination_uri={IMAGE_DESTINATION_URI}'
+                f'-format={IMAGE_FORMAT}',
+                f'-destination_uri={IMAGE_DESTINATION_URI}',
                 f'-compute_service_account={SERVICE_ACCOUNT_EMAIL}'
             ],
             'name':'gcr.io/compute-image-tools/gce_vm_image_export:release',
