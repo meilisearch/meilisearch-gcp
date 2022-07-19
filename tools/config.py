@@ -17,7 +17,7 @@ IMAGE_DESCRIPTION_NAME = f'Meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG} running
 IMAGE_FORMAT = 'vmdk'
 IMAGE_DESTINATION_URI = f'gs://meilisearch-image/meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG}-{DEBIAN_BASE_IMAGE_FAMILY}.{IMAGE_FORMAT}'
 IMAGE_DESTINATION_BUCKET_NAME = 'meilisearch-image'
-SERVICE_ACCOUNT_EMAIL = '591812945139-compute@developer.gserviceaccount.com'
+SERVICE_ACCOUNT_EMAIL = '591812945139@cloudbuild.gserviceaccount.com'
 
 USER_DATA = requests.get(
     f'https://raw.githubusercontent.com/meilisearch/cloud-scripts/{MEILI_CLOUD_SCRIPTS_VERSION_TAG}/scripts/providers/gcp/cloud-config.yaml'
@@ -139,10 +139,10 @@ EXPORT_IMAGE_CONFIG = {
         {
             'args': [
                 '-timeout=7000s',
-                f'-source_image={PUBLISH_IMAGE_NAME}'
+                f'-source_image={PUBLISH_IMAGE_NAME}',
                 '-client_id=api',
-                f'-format={IMAGE_FORMAT}'
-                f'-destination_uri={IMAGE_DESTINATION_URI}'
+                f'-format={IMAGE_FORMAT}',
+                f'-destination_uri={IMAGE_DESTINATION_URI}',
                 f'-compute_service_account={SERVICE_ACCOUNT_EMAIL}'
             ],
             'name':'gcr.io/compute-image-tools/gce_vm_image_export:release',
