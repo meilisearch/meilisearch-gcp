@@ -3,7 +3,7 @@ import requests
 
 # Update with the Meilisearch version TAG you want to build the image with
 
-MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.28.0'
+MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.29.0'
 
 # Update with the custom image name that you want to publish after TESTING
 
