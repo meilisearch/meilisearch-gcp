@@ -7,12 +7,12 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.29.0'
 
 # Update with the custom image name that you want to publish after TESTING
 
-PUBLISH_IMAGE_NAME = 'meilisearch-v0-28-0-debian-10-build--18-07-2022-14-48-17'
+PUBLISH_IMAGE_NAME = 'meilisearch-v0-29-0-ubuntu-2004-lts-build--06-10-2022-14-20-30'
 
 # Setup environment and settings
 
-DEBIAN_BASE_IMAGE_PROJECT = 'debian-cloud'
-DEBIAN_BASE_IMAGE_FAMILY = 'debian-10'
+DEBIAN_BASE_IMAGE_PROJECT = 'ubuntu-os-cloud'
+DEBIAN_BASE_IMAGE_FAMILY = 'ubuntu-2004-lts'
 IMAGE_DESCRIPTION_NAME = f'Meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG} running on {DEBIAN_BASE_IMAGE_FAMILY}'
 IMAGE_FORMAT = 'vmdk'
 IMAGE_DESTINATION_URI = f'gs://meilisearch-image/meilisearch-{MEILI_CLOUD_SCRIPTS_VERSION_TAG}-{DEBIAN_BASE_IMAGE_FAMILY}.{IMAGE_FORMAT}'
