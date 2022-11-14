@@ -19,13 +19,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.7
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: 3.7
     - name: Install dependencies
       run: pip3 install -r requirements.txt
     - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.6.0
+      uses: google-github-actions/setup-gcloud@v0.6.2
       with:
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         export_default_credentials: true
@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: 3.7
       - name: Install dependencies
