@@ -24,11 +24,14 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: pip3 install -r requirements.txt
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.6.2
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
       with:
-        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        export_default_credentials: true
+        credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+    - name: 'Use gcloud CLI'
+      run: 'gcloud info'
     - name: Set image name as env variable
       run: echo "IMAGE_NAME=meilisearch-gcp-ci-test-$(date +'%d-%m-%Y-%H-%M-%S')" >> $GITHUB_ENV
     - name: Build image
