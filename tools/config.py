@@ -3,11 +3,11 @@ import requests
 
 # Update with the Meilisearch version TAG you want to build the image with
 
-MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.29.1'
+MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v0.30.4'
 
 # Update with the custom image name that you want to publish after TESTING
 
-PUBLISH_IMAGE_NAME = 'meilisearch-v0-29-1-debian-10-build--24-10-2022-17-28-36'
+PUBLISH_IMAGE_NAME = 'meilisearch-v0-30-4-debian-10-build--19-12-2022-14-02-39'
 
 # Setup environment and settings
 
