@@ -1,3 +1,5 @@
+import datetime
+import time
 import sys
 import googleapiclient.discovery
 import config as conf
@@ -37,7 +39,7 @@ print(f'   Instance created. Name: {conf.INSTANCE_BUILD_NAME}')
 # Wait for GCP instance to be 'RUNNING'
 
 print('Waiting for GCP Compute instance state to be "RUNNING"')
-state_code, state = utils.wait_for_instance_running(
+state_code, state, instance = utils.wait_for_instance_running(
     conf.GCP_DEFAULT_PROJECT, conf.GCP_DEFAULT_ZONE, timeout_seconds=600)
 print(f'   Instance state: {state}')
 
@@ -88,18 +90,36 @@ print('   Version of Meilisearch match!')
 
 # Stop instance before image creation
 
-print('Stopping GCP instance...')
-instance = compute.instances().get(
-    project=conf.GCP_DEFAULT_PROJECT,
-    zone=conf.GCP_DEFAULT_ZONE,
-    instance=conf.INSTANCE_BUILD_NAME
-).execute()
+print(conf.INSTANCE_BUILD_NAME)
 
-stop_instance_operation = compute.instances().stop(
-    project=conf.GCP_DEFAULT_PROJECT,
-    zone=conf.GCP_DEFAULT_ZONE,
-    instance=conf.INSTANCE_BUILD_NAME
-).execute()
+print('Stopping GCP instance...')
+
+TIMEOUT_SECONDS=60
+start_time = datetime.datetime.now()
+IS_TIMEOUT=0
+while IS_TIMEOUT is utils.STATUS_OK:
+    try:
+        print('Trying to stop instance ...')
+        stop_instance_operation = compute.instances().stop(
+            project=conf.GCP_DEFAULT_PROJECT,
+            zone=conf.GCP_DEFAULT_ZONE,
+            instance=conf.INSTANCE_BUILD_NAME
+        ).execute()
+        break
+    except Exception as err:
+        print(f'   Exception: {err}')
+    time.sleep(1)
+    IS_TIMEOUT=utils.check_timeout(start_time, TIMEOUT_SECONDS)
+if IS_TIMEOUT is not utils.STATUS_OK:
+    print('Timeout when trying to stop the instance')
+    utils.terminate_instance_and_exit(
+        compute=compute,
+        project=conf.GCP_DEFAULT_PROJECT,
+        zone=conf.GCP_DEFAULT_ZONE,
+        instance=conf.INSTANCE_BUILD_NAME
+    )
+
+print('Successfully stopped instance')
 
 STOPPED = utils.wait_for_zone_operation(
     compute=compute,
