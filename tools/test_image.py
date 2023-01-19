@@ -91,7 +91,7 @@ start_time = datetime.datetime.now()
 IS_TIMEOUT=0
 while IS_TIMEOUT is utils.STATUS_OK:
     try:
-        print('Trying to stop instance ...')
+        print('Trying to stop the instance ...')
         stop_instance_operation = compute.instances().stop(
             project=conf.GCP_DEFAULT_PROJECT,
             zone=conf.GCP_DEFAULT_ZONE,
