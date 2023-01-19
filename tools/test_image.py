@@ -103,7 +103,7 @@ while IS_TIMEOUT is utils.STATUS_OK:
     time.sleep(1)
     IS_TIMEOUT=utils.check_timeout(start_time, TIMEOUT_SECONDS)
 if IS_TIMEOUT is not utils.STATUS_OK:
-    print('Timeout when trying to stop the instance')
+    print('Timeout or an error occurred when trying to stop the instance')
     utils.terminate_instance_and_exit(
         compute=compute,
         project=conf.GCP_DEFAULT_PROJECT,
