@@ -90,8 +90,6 @@ print('   Version of Meilisearch match!')
 
 # Stop instance before image creation
 
-print(conf.INSTANCE_BUILD_NAME)
-
 print('Stopping GCP instance...')
 
 TIMEOUT_SECONDS=60
