@@ -111,7 +111,7 @@ if IS_TIMEOUT is not utils.STATUS_OK:
         instance=conf.INSTANCE_BUILD_NAME
     )
 
-print('Successfully stopped instance')
+print('Successfully stopped the instance')
 
 STOPPED = utils.wait_for_zone_operation(
     compute=compute,
