@@ -7,7 +7,7 @@ MEILI_CLOUD_SCRIPTS_VERSION_TAG = 'v1.0.0'
 
 # Update with the custom image name that you want to publish after TESTING
 
-PUBLISH_IMAGE_NAME = 'meilisearch-v0-29-1-debian-10-build--24-10-2022-17-28-36'
+PUBLISH_IMAGE_NAME = 'meilisearch-v1-0-0-debian-10-build--06-02-2023-12-07-26'
 
 # Setup environment and settings
 
