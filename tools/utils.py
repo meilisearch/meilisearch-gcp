@@ -22,10 +22,10 @@ def wait_for_instance_running(project, zone, timeout_seconds=None):
                                            instance=conf.INSTANCE_BUILD_NAME).execute()
         if instance['status'] not in ['STAGING', 'PROVISIONING']:
             if instance['status'] == 'RUNNING':
-                return STATUS_OK, instance['status']
-            return STATUS_ERROR, instance['status']
+                return STATUS_OK, instance['status'], instance
+            return STATUS_ERROR, instance['status'], instance
         time.sleep(1)
-    return STATUS_TIMEOUT, None
+    return STATUS_TIMEOUT, None, instance
 
 
 def wait_for_health_check(instance_ip, timeout_seconds=None):
