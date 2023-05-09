@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/meilisearch/integration-guides/main/assets/logos/meilisearch_gcp.svg" alt="Meilisearch-GCP" width="200" height="200" />
 </p>
 
-<h1 align="center">Meilisearch GCP</h1>
+<h1 align="center">[DEPRECATED] Meilisearch GCP</h1>
 
 <h4 align="center">
   <a href="https://github.com/meilisearch/meilisearch">Meilisearch</a> |
@@ -19,6 +19,12 @@
 </p>
 
 <p align="center">⚡ Meilisearch tools for GCP integration</p>
+
+---------
+
+⚠️ **Please note that this repository is no longer being maintained and has been deprecated. GCP is still a provider we maintain integration with, and this is the new repository [cloud-providers](https://github.com/meilisearch/cloud-providers).**
+
+---------
 
 **Meilisearch GCP** is a set of tools and scripts to improve user deployment of Meilisearch on [Google Cloud Platform](https://cloud.google.com).
 
